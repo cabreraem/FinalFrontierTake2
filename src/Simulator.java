@@ -15,6 +15,7 @@ public class Simulator extends JPanel implements ActionListener{
     Universe world;
     int initWidth;
     int initHeight;
+    int start;
 
 
     public Simulator(int x, int y) {
@@ -25,8 +26,8 @@ public class Simulator extends JPanel implements ActionListener{
         initWidth = x;
         initHeight = y;
 
-        /*Timer timer = new Timer(1000 / 60, this);
-        timer.start();*/
+        Timer timer = new Timer(1000 / 60, this);
+        timer.start();
 
         ArrayList<Body> planets = new ArrayList<>();
 
@@ -64,6 +65,7 @@ public class Simulator extends JPanel implements ActionListener{
 
         world = new Universe(radius, planets);
 
+        start = 1;
     }
 
     public void actionPerformed(ActionEvent e){
@@ -100,11 +102,11 @@ public class Simulator extends JPanel implements ActionListener{
     }
 
     public void update(){
-        /*for(int i=1; i < world.getBodies().size(); i++){
+        for(int i=1; i < world.getBodies().size(); i++){
             Body temp = world.getBodies().get(i);
             temp.force(world.getBodies().get(0));
-            temp.move(86400);
-        }*/
+            temp.move(10);
+        }
         repaint();
     }
 
@@ -115,20 +117,28 @@ public class Simulator extends JPanel implements ActionListener{
 
         for(int i=0; i < world.getBodies().size(); i++){
             Body temp = world.getBodies().get(i);
-            System.out.println(temp.getName() +"'s PosX "+ Math.cbrt(temp.getPosX())/3.0);
-            System.out.println(temp.getName() +"'s PosY "+ (int)(initHeight+Math.cbrt(temp.getPosY())/3));
+            System.out.println(temp.getName() +"'s PosX "+ Math.cbrt(temp.getPosX())/2.5);
 
-            radius = (int) Math.sqrt(temp.getRadius())/10;
+            radius = (int) Math.sqrt(temp.getRadius())/11;
             System.out.println(radius);
+
+            System.out.println();
 
             if(i==0)
                 g.setColor(Color.YELLOW);
             else
                 g.setColor(Color.RED);
 
-            g.fillOval((int)(initWidth+Math.cbrt(temp.getPosX())/3), (int)(initHeight+Math.cbrt(temp.getPosY())/3), radius, radius);
+            if(start == 1){
+                g.fillOval((int)(initWidth-radius+Math.cbrt(temp.getPosX())/2.5), initHeight, radius*2, radius*2);
+                start = -1;
+                System.out.println(temp.getName() +"'s PosY "+ initHeight);
+            }
+            else{
+                g.fillOval((int) (initWidth - radius + Math.cbrt(temp.getPosX()) / 2.5), (int) (initHeight - radius + Math.cbrt(temp.getPosY()) / 2.5), radius * 2, radius * 2);
+                System.out.println(temp.getName() +"'s PosY "+ (int) (initHeight - radius + Math.cbrt(temp.getPosY()) / 2.5));
+            }
         }
-
     }
 
 }

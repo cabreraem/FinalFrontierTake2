@@ -3,7 +3,7 @@
  */
 public class Body {
 
-    private final static double G = 6.67e11;
+    private final static double G = 6.67e-11;
 
     private Body orbit;
 
@@ -109,7 +109,17 @@ public class Body {
     //Methods
     public double getGravity(double d){
 
-        double g = G*mass / Math.pow(d,2);
+        double g;
+
+        if(d==0)
+            return 0.0;
+
+        if(d<0)
+            g = -1;
+        else
+            g = 1;
+
+        g *= G*mass / Math.pow(d,2);
 
         return g;
     }
