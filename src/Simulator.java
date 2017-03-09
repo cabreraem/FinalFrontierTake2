@@ -102,15 +102,15 @@ public class Simulator extends JPanel implements ActionListener{
     }
 
     public void update(){
-        if(start == -1){
+        /*if(start == -1){
             for(int i=1; i < world.getBodies().size(); i++){
                 Body temp = world.getBodies().get(i);
                 temp.force(world.getBodies().get(0));
                 temp.move(10);
             }
-        }
+        }*/
 
-        repaint();
+        //repaint();
     }
 
     public void paintComponent(Graphics g){
@@ -122,7 +122,7 @@ public class Simulator extends JPanel implements ActionListener{
             Body temp = world.getBodies().get(i);
             System.out.println(temp.getName() +"'s PosX "+ Math.cbrt(temp.getPosX())/2.5);
 
-            radius = (int) Math.sqrt(temp.getRadius())/11;
+            radius = (int) Math.sqrt(temp.getRadius())/220;
 
             if(i==0)
                 g.setColor(Color.YELLOW);
@@ -130,11 +130,11 @@ public class Simulator extends JPanel implements ActionListener{
                 g.setColor(Color.RED);
 
             if(start == 1){
-                g.fillOval((int)(initWidth-radius+Math.cbrt(temp.getPosX())/2.5), initHeight-radius, radius*2, radius*2);
+                g.fillOval((int)(initWidth-radius+Math.cbrt(temp.getPosX())/27), initHeight-radius, radius*2, radius*2);
                 System.out.println(temp.getName() +"'s PosY "+ (initHeight-radius));
             }
             else{
-                g.fillOval((int) (initWidth - radius + Math.cbrt(temp.getPosX()) / 2.5), (int) (initHeight - radius + Math.cbrt(temp.getPosY())/2.5), radius * 2, radius * 2);
+                g.fillOval((int) (initWidth - radius + Math.cbrt(temp.getPosX()) /27), (int) (initHeight - radius + Math.cbrt(temp.getPosY())/2.5), radius * 2, radius * 2);
                 System.out.println(temp.getName() +"'s PosY "+ (int) (initHeight - radius + Math.cbrt(temp.getPosY()) / 2.5));
             }
         }
