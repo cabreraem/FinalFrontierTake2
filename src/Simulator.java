@@ -23,7 +23,7 @@ public class Simulator extends JPanel implements ActionListener {
     public Simulator(JFrame dimensions) {
         setBackground(Color.BLACK);
 
-        setFocusable(true);
+        //setFocusable(true);
 
         initWidth = dimensions.getWidth() / 2;
         initHeight = dimensions.getHeight() / 2;
@@ -61,6 +61,7 @@ public class Simulator extends JPanel implements ActionListener {
 
             planet = new Body(name, stats.get(0), stats.get(1), stats.get(2), stats.get(3));
             planets.add(planet);
+            System.out.println(planet.getVelocityY());
 
             radius = 2*stats.get(2);
         }
@@ -120,7 +121,7 @@ public class Simulator extends JPanel implements ActionListener {
 
         for(int i=0; i < world.getBodies().size(); i++){
             Body temp = world.getBodies().get(i);
-            System.out.println(temp.getName() +"'s PosX "+ Math.cbrt(temp.getPosX())/27);
+            System.out.println(temp.getName() +"'s PosX "+ temp.getPosX());
 
             radius = (int) Math.sqrt(temp.getRadius())/250;
 

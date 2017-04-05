@@ -4,6 +4,7 @@
 public class Body {
 
     private final static double G = 6.67e-11;
+    private double sunMass = 1.99e30 ;
 
     private Body orbit;
 
@@ -25,7 +26,7 @@ public class Body {
         radius = r;
         axis = a;
         velocityX = 0;
-        velocityY = v;
+        velocityY = -Math.sqrt(G*sunMass/r);
         label = s;
 
         posX = a;
