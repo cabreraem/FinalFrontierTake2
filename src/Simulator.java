@@ -20,13 +20,13 @@ public class Simulator extends JPanel implements ActionListener {
     int start;
 
 
-    public Simulator(int x, int y) {
+    public Simulator(JFrame dimensions) {
         setBackground(Color.BLACK);
 
         setFocusable(true);
 
-        initWidth = x;
-        initHeight = y;
+        initWidth = dimensions.getWidth() / 2;
+        initHeight = dimensions.getHeight() / 2;
 
         //Timer timer = new Timer(1000 / 60, this);
         //timer.start();
@@ -70,11 +70,8 @@ public class Simulator extends JPanel implements ActionListener {
         //start = 1;
     }
 
-    public void next(int k){
-        if(k==java.awt.event.KeyEvent.VK_UP) {
-            update();
-            System.out.println(k);
-        }
+    public void next(){
+        update();
     }
 
     public static int getFileSize(String fileName)throws IOException {
@@ -125,7 +122,7 @@ public class Simulator extends JPanel implements ActionListener {
             Body temp = world.getBodies().get(i);
             System.out.println(temp.getName() +"'s PosX "+ Math.cbrt(temp.getPosX())/27);
 
-            radius = (int) Math.sqrt(temp.getRadius())/220;
+            radius = (int) Math.sqrt(temp.getRadius())/250;
 
             if(i==0)
                 g.setColor(Color.YELLOW);

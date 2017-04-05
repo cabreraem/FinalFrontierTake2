@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 
 /**
@@ -16,14 +18,14 @@ public class Main {
         JFrame frame = new JFrame("");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
-
-        simulator = new Simulator(500,400);
+        frame.setSize(1250, 800);
+        simulator = new Simulator(frame);
 
         frame.add(simulator, BorderLayout.CENTER);
 
-        frame.setSize(1000, 1000);
         frame.setVisible(true);
         frame.addKeyListener(new listen());
+        frame.addMouseListener(new mouse());
 
         /*SwingUtilities.invokeLater(new Runnable() {
 
@@ -53,8 +55,36 @@ public class Main {
         }
 
         public void keyReleased(KeyEvent e){
-            simulator.next(e.getKeyCode());
+            simulator.next();
             System.out.println(e.getKeyCode());
+        }
+    }
+
+    public static class mouse implements MouseListener{
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            simulator.next();
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+
         }
     }
 }
