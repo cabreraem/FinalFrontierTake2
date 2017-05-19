@@ -61,8 +61,7 @@ public class Simulator extends JPanel implements ActionListener {
 
             planet = new Body(name, stats.get(0), stats.get(1), stats.get(2), stats.get(3));
             planets.add(planet);
-            System.out.println(planet.getVelocityY());
-
+            System.out.println(planet);
             radius = 2*stats.get(2);
         }
 
@@ -72,7 +71,9 @@ public class Simulator extends JPanel implements ActionListener {
     }
 
     public void next(){
-        update();
+        for (int x = 0; x < 10000; x++) {
+            update();
+        }
     }
 
     public static int getFileSize(String fileName)throws IOException {
@@ -121,17 +122,18 @@ public class Simulator extends JPanel implements ActionListener {
 
         for(int i=0; i < world.getBodies().size(); i++){
             Body temp = world.getBodies().get(i);
-            System.out.println(temp.getName() +"'s PosX "+ temp.getPosX());
 
-            radius = (int) Math.sqrt(temp.getRadius())/250;
+            radius = (int) Math.sqrt(temp.getRadius())/300;
 
             if(i==0)
                 g.setColor(Color.YELLOW);
             else
                 g.setColor(Color.RED);
 
-            g.fillOval((int) (initWidth - radius + Math.cbrt(temp.getPosX()) /27), (int) (initHeight - radius + Math.cbrt(temp.getPosY())/2.5), radius * 2, radius * 2);
-            System.out.println(temp.getName() +"'s PosY "+ temp.getPosY());
+            g.fillOval((int) (initWidth - radius + Math.cbrt(temp.getPosX()) /45), (int) (initHeight - radius + Math.cbrt(temp.getPosY())/45), radius * 2, radius * 2);
+
+            System.out.println(temp.getName() + " xvelocity: " + temp.getVelocityX());
+            System.out.println(temp.getName() + " yvelocity: " + temp.getVelocityY());
         }
 
     }
