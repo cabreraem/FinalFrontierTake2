@@ -27,8 +27,9 @@ public class Body {
         axis = a;
         posX = a / Math.sqrt(2);
         posY = a / Math.sqrt(2);
-        velocityX = Math.sqrt(G*sunMass/posX);
-        velocityY = -Math.sqrt(G*sunMass/posY);
+        double vel = Math.sqrt(G*sunMass/a);
+        velocityX = vel / Math.sqrt(2);
+        velocityY = - vel /Math.sqrt(2);
         label = s;
     }
 
@@ -115,9 +116,9 @@ public class Body {
             return 0.0;
 
         if(d>0)
-            g = -1;
-        else
             g = 1;
+        else
+            g = -1;
 
         g *= G*sunMass / Math.pow(d,2);
 
@@ -128,16 +129,22 @@ public class Body {
         double dX = b.getPosX() - posX;
         double dY = b.getPosY() - posY;
 
-        System.out.println("x: " + dX + "   y: " + dY);
+        //System.out.println("x: " + dX + "   y: " + dY);
         accelY += b.getGravity(dY);
+        accelX += b.getGravity(dX);
     }
 
     public void move(int t){
         velocityX += accelX * t;
         velocityY += accelY * t;
-        //System.out.println(velocityX);
+
         posX += velocityX * t;
         posY += velocityY * t;
+
+        if(label.equals("Mercury")) {
+            System.out.println("xaccel: " + accelX);
+            System.out.println("yaccel: " + accelY);
+        }
 
         accelX = 0;
         accelY = 0;

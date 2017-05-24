@@ -71,9 +71,7 @@ public class Simulator extends JPanel implements ActionListener {
     }
 
     public void next(){
-        for (int x = 0; x < 10000; x++) {
-            update();
-        }
+        update();
     }
 
     public static int getFileSize(String fileName)throws IOException {
@@ -109,7 +107,7 @@ public class Simulator extends JPanel implements ActionListener {
         for(int i=1; i < world.getBodies().size(); i++){
             Body temp = world.getBodies().get(i);
             temp.force(world.getBodies().get(0));
-            temp.move(100);
+            temp.move(50000);
         }
 
         repaint();
@@ -132,8 +130,8 @@ public class Simulator extends JPanel implements ActionListener {
 
             g.fillOval((int) (initWidth - radius + Math.cbrt(temp.getPosX()) /45), (int) (initHeight - radius + Math.cbrt(temp.getPosY())/45), radius * 2, radius * 2);
 
-            System.out.println(temp.getName() + " xvelocity: " + temp.getVelocityX());
-            System.out.println(temp.getName() + " yvelocity: " + temp.getVelocityY());
+            //System.out.println(temp.getName() + " xvelocity: " + temp.getVelocityX());
+            //System.out.println(temp.getName() + " yvelocity: " + temp.getVelocityY());
         }
 
     }
