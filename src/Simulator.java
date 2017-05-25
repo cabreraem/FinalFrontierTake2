@@ -3,8 +3,6 @@ import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -17,19 +15,14 @@ public class Simulator extends JPanel implements ActionListener {
     Universe world;
     int initWidth;
     int initHeight;
-    int start;
-
 
     public Simulator(JFrame dimensions) {
         setBackground(Color.BLACK);
 
-        //setFocusable(true);
+        setFocusable(true);
 
         initWidth = dimensions.getWidth() / 2;
         initHeight = dimensions.getHeight() / 2;
-
-        //Timer timer = new Timer(1000 / 60, this);
-        //timer.start();
 
         ArrayList<Body> planets = new ArrayList<>();
 
@@ -66,7 +59,8 @@ public class Simulator extends JPanel implements ActionListener {
 
         world = new Universe(radius, planets);
 
-        //start = 1;
+        Timer timer = new Timer(1000/60, this);
+        timer.start();
     }
 
     public void next(){
@@ -108,7 +102,6 @@ public class Simulator extends JPanel implements ActionListener {
             temp.updateAccelFrom(world.getBodies().get(0));
             temp.move(50000);
         }
-
         repaint();
     }
 
