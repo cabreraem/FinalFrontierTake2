@@ -61,7 +61,6 @@ public class Simulator extends JPanel implements ActionListener {
 
             planet = new Body(name, stats.get(0), stats.get(1), stats.get(2), stats.get(3));
             planets.add(planet);
-            System.out.println(planet);
             radius = 2*stats.get(2);
         }
 
@@ -106,7 +105,7 @@ public class Simulator extends JPanel implements ActionListener {
     public void update(){
         for(int i=1; i < world.getBodies().size(); i++){
             Body temp = world.getBodies().get(i);
-            temp.force(world.getBodies().get(0));
+            temp.updateAccelFrom(world.getBodies().get(0));
             temp.move(50000);
         }
 

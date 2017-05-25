@@ -4,7 +4,6 @@
 public class Body {
 
     private final static double G = 6.67e-11;
-    private double sunMass = 1.99e30 ;
 
     private Body orbit;
 
@@ -27,7 +26,7 @@ public class Body {
         axis = a;
         posX = a / Math.sqrt(2);
         posY = a / Math.sqrt(2);
-        double vel = Math.sqrt(G*sunMass/a);
+        double vel = Math.sqrt(G*1.99e30/a);
         velocityX = vel / Math.sqrt(2);
         velocityY = - vel /Math.sqrt(2);
         label = s;
@@ -107,46 +106,38 @@ public class Body {
         this.posY = posY;
     }
 
-    //Methods
-    public double getGravity(double d){
-
-        double g;
-
-        if(d==0)
-            return 0.0;
-
-        if(d>0)
-            g = 1;
-        else
-            g = -1;
-
-        g *= G*sunMass / Math.pow(d,2);
-
-        return g;
-    }
-
-    public void force(Body b){
+    public void updateAccelFrom(Body b){
         double dX = b.getPosX() - posX;
         double dY = b.getPosY() - posY;
+        double dist = Math.sqrt(dX*dX + dY*dY);
+        //double dist = this.axis;
 
-        //System.out.println("x: " + dX + "   y: " + dY);
-        accelY += b.getGravity(dY);
-        accelX += b.getGravity(dX);
+        double totalAccel = G * b.getMass() / Math.pow(dist, 2);
+
+        this.accelX = (dX / dist) * totalAccel;
+        this.accelY = (dY / dist) * totalAccel;
+        if(this.label.equals("Mercury")) {
+            System.out.println("xaccel: " + this.accelX);
+            System.out.println("yaccel: " + this.accelY);
+        }
     }
 
     public void move(int t){
-        velocityX += accelX * t;
-        velocityY += accelY * t;
-
-        posX += velocityX * t;
-        posY += velocityY * t;
-
-        if(label.equals("Mercury")) {
-            System.out.println("xaccel: " + accelX);
-            System.out.println("yaccel: " + accelY);
+        //permit arbitrarily large intervals
+        int interval = Math.min(t, 100);
+        for (int i = 0; i < t/interval; i++) {
+            moveHelper(interval);
         }
+        moveHelper(t%interval);
+    }
 
-        accelX = 0;
-        accelY = 0;
+    void moveHelper(int t){
+        this.velocityX += this.accelX * t;
+        this.velocityY += this.accelY * t;
+
+        this.posX += this.velocityX * t;
+        this.posY += this.velocityY * t;
+
+        //TODO: update acceleration values
     }
 }

@@ -38,7 +38,7 @@ public class Universe {
         for(Body b: bodies){
             for(Body other:bodies){
                 if(!b.equals(other)){
-                    b.force(other);
+                    b.updateAccelFrom(other);
                 }
             }
         }
