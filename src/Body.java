@@ -18,9 +18,11 @@ public class Body {
     private double period;
     private double axis;
     private String label;
+    private double accel;
+    private String image;
 
     //Constructors
-    public Body(String s, double m, double r, double a, double v){
+    public Body(String s, double m, double r, double a, double v, String i){
         mass = m;
         radius = r;
         axis = a;
@@ -30,6 +32,9 @@ public class Body {
         velocityX = vel / Math.sqrt(2);
         velocityY = - vel /Math.sqrt(2);
         label = s;
+        accel = 0;
+
+        image = i;
     }
 
     public Body(double m, double r, double x, double y, double vX, double vY, double p, double a) {
@@ -97,6 +102,8 @@ public class Body {
         return axis;
     }
 
+    public String getImage(){ return image;}
+
     //Setters
     public void setPosX(double posX) {
         this.posX = posX;
@@ -112,10 +119,10 @@ public class Body {
         double dist = Math.sqrt(dX*dX + dY*dY);
         //double dist = this.axis;
 
-        double totalAccel = G * b.getMass() / Math.pow(dist, 2);
+        accel = G * b.getMass() / Math.pow(dist, 2);
 
-        this.accelX = (dX / dist) * totalAccel;
-        this.accelY = (dY / dist) * totalAccel;
+        this.accelX = (dX / dist) * accel;
+        this.accelY = (dY / dist) * accel;
         if(this.label.equals("Mercury")) {
             System.out.println("xaccel: " + this.accelX);
             System.out.println("yaccel: " + this.accelY);

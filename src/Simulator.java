@@ -1,8 +1,11 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -15,11 +18,19 @@ public class Simulator extends JPanel implements ActionListener {
     Universe world;
     int initWidth;
     int initHeight;
+    JPanel sidebar;
 
     public Simulator(JFrame dimensions) {
         setBackground(Color.BLACK);
 
         setFocusable(true);
+
+        sidebar = new JPanel();
+        sidebar.setLayout(null);
+        sidebar.setBounds(dimensions.getWidth()-100, 0, 100, dimensions.getHeight());
+        sidebar.setBackground(Color.DARK_GRAY);
+        sidebar.setVisible(true);
+        this.add(sidebar);
 
         initWidth = dimensions.getWidth() / 2;
         initHeight = dimensions.getHeight() / 2;
@@ -47,12 +58,13 @@ public class Simulator extends JPanel implements ActionListener {
             stats = new ArrayList();
 
             String name = bodyParts.get(0);
-            for(int i = 1; i < bodyParts.size(); i++){
+            String image = bodyParts.get(bodyParts.size()-1);
+            for(int i = 1; i < bodyParts.size()-1; i++){
                 Double temp = Double.parseDouble(bodyParts.get(i));
                 stats.add(temp);
             }
 
-            planet = new Body(name, stats.get(0), stats.get(1), stats.get(2), stats.get(3));
+            planet = new Body(name, stats.get(0), stats.get(1), stats.get(2), stats.get(3), image);
             planets.add(planet);
             radius = 2*stats.get(2);
         }
@@ -100,7 +112,7 @@ public class Simulator extends JPanel implements ActionListener {
         for(int i=1; i < world.getBodies().size(); i++){
             Body temp = world.getBodies().get(i);
             temp.updateAccelFrom(world.getBodies().get(0));
-            temp.move(50000);
+            temp.move(75000);
         }
         repaint();
     }
@@ -113,15 +125,24 @@ public class Simulator extends JPanel implements ActionListener {
         for(int i=0; i < world.getBodies().size(); i++){
             Body temp = world.getBodies().get(i);
 
-            radius = (int) Math.sqrt(temp.getRadius())/300;
+            if(i == 0){
+                radius = (int) Math.sqrt(temp.getRadius()) / 100;
+            }
+            else {
+                radius = (int) Math.sqrt(temp.getRadius()) / 300;
+            }
 
-            if(i==0)
-                g.setColor(Color.YELLOW);
-            else
-                g.setColor(Color.RED);
+            try{
+                BufferedImage img = ImageIO.read(new File(temp.getImage()));
+                g.drawImage(img,(int) (initWidth - radius + Math.cbrt(temp.getPosX()) /45), (int) (initHeight - radius + Math.cbrt(temp.getPosY())/45), radius * 2, radius * 2, null);
+            } catch(IOException e){
+                if(i==0)
+                    g.setColor(Color.YELLOW);
+                else
+                    g.setColor(Color.RED);
 
-            g.fillOval((int) (initWidth - radius + Math.cbrt(temp.getPosX()) /45), (int) (initHeight - radius + Math.cbrt(temp.getPosY())/45), radius * 2, radius * 2);
-
+                g.fillOval((int) (initWidth - radius + Math.cbrt(temp.getPosX()) /45), (int) (initHeight - radius + Math.cbrt(temp.getPosY())/45), radius * 2, radius * 2);
+            }
             //System.out.println(temp.getName() + " xvelocity: " + temp.getVelocityX());
             //System.out.println(temp.getName() + " yvelocity: " + temp.getVelocityY());
         }
