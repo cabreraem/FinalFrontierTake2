@@ -63,7 +63,8 @@ public class Main {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            simulator.next();
+            System.out.println("clicked");
+            simulator.info(e.getX(),e.getY());
         }
 
         @Override
@@ -78,7 +79,7 @@ public class Main {
 
         @Override
         public void mouseEntered(MouseEvent e) {
-
+            //simulator.hover(e.getX(),e.getY());
         }
 
         @Override

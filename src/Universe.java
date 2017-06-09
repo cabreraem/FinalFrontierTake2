@@ -44,7 +44,7 @@ public class Universe {
         }
 
         //make every body move
-        for(Body b: bodies)
-            b.move(t);
+        //for(Body b: bodies)
+            //b.move(t, );
     }
 }

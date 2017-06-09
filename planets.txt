@@ -1,8 +1,8 @@
 Sun, 1.99E+30,69500000,0,0,0,Sun.png
 Mercury, 3.30E+23,2439500,5.79E+10,47870,mercury.png
-Venus, 4.87E+24,6052000,1.08E+11,35020,venus.gif
-Earth, 5.97E+24,6378000,1.50E+11,29780,earth.gif
-Mars, 6.42E+23,3396000,2.28E+11,24077,mars.gif
+Venus, 4.87E+24,6052000,1.08E+11,35020,venus.png
+Earth, 5.97E+24,6378000,1.50E+11,29780,earth.png
+Mars, 6.42E+23,3396000,2.28E+11,24077,mars.png
 Jupiter, 1.90E+27,71492000,7.79E+11,13070,jupiter.png
 Saturn, 5.68E+26,60268000,1.43E+12,9690,saturn.png
 Uranus, 8.68E+25,25559000,2.87E+12,6810,uranus.png

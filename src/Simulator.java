@@ -8,6 +8,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -16,22 +18,17 @@ import java.util.*;
 public class Simulator extends JPanel implements ActionListener {
 
     Universe world;
+    ArrayList<Shape> images;
     int initWidth;
     int initHeight;
-    JPanel sidebar;
+    boolean sideBar;
+    Body tagged;
 
     public Simulator(JFrame dimensions) {
         setBackground(Color.BLACK);
-
         setFocusable(true);
 
-        sidebar = new JPanel();
-        sidebar.setLayout(null);
-        sidebar.setBounds(dimensions.getWidth()-100, 0, 100, dimensions.getHeight());
-        sidebar.setBackground(Color.DARK_GRAY);
-        sidebar.setVisible(true);
-        this.add(sidebar);
-
+        sideBar = false;
         initWidth = dimensions.getWidth() / 2;
         initHeight = dimensions.getHeight() / 2;
 
@@ -111,8 +108,8 @@ public class Simulator extends JPanel implements ActionListener {
     public void update(){
         for(int i=1; i < world.getBodies().size(); i++){
             Body temp = world.getBodies().get(i);
-            temp.updateAccelFrom(world.getBodies().get(0));
-            temp.move(75000);
+            //temp.updateAccelFrom(world.getBodies().get(0));
+            temp.move(75000, world.getBodies().get(0));
         }
         repaint();
     }
@@ -122,31 +119,104 @@ public class Simulator extends JPanel implements ActionListener {
 
         super.paintComponent(g);
 
+        images = new ArrayList<>();
         for(int i=0; i < world.getBodies().size(); i++){
             Body temp = world.getBodies().get(i);
 
-            if(i == 0){
-                radius = (int) Math.sqrt(temp.getRadius()) / 100;
-            }
-            else {
-                radius = (int) Math.sqrt(temp.getRadius()) / 300;
-            }
+            radius = temp.getScaledRadius();
 
+
+            Rectangle shape = new Rectangle(initWidth - radius + temp.getScaledX(), initHeight - radius + temp.getScaledY(), radius * 2 +20, radius * 2 +20);
+            //g.setColor(Color.DARK_GRAY);
+            //g.drawRect((int)shape.getX(),(int) shape.getY(), radius * 2, radius * 2);
+            images.add(shape);
             try{
                 BufferedImage img = ImageIO.read(new File(temp.getImage()));
-                g.drawImage(img,(int) (initWidth - radius + Math.cbrt(temp.getPosX()) /45), (int) (initHeight - radius + Math.cbrt(temp.getPosY())/45), radius * 2, radius * 2, null);
+                g.drawImage(img,(int)shape.getX(),(int) shape.getY(), radius * 2, radius * 2, null);
             } catch(IOException e){
                 if(i==0)
                     g.setColor(Color.YELLOW);
                 else
                     g.setColor(Color.RED);
 
-                g.fillOval((int) (initWidth - radius + Math.cbrt(temp.getPosX()) /45), (int) (initHeight - radius + Math.cbrt(temp.getPosY())/45), radius * 2, radius * 2);
+                g.fillOval(initWidth - radius + temp.getScaledX(), initHeight - radius + temp.getScaledY(), radius * 2, radius * 2);
             }
-            //System.out.println(temp.getName() + " xvelocity: " + temp.getVelocityX());
-            //System.out.println(temp.getName() + " yvelocity: " + temp.getVelocityY());
         }
 
+        if(sideBar){
+            g.setColor(Color.DARK_GRAY);
+            g.fillRect(0, 0, initWidth/2, initHeight*2);
+
+            try{
+                BufferedImage img = ImageIO.read(new File(tagged.getImage()));
+                g.drawImage(img,initWidth/8,50,initWidth/4,initWidth/4, null);
+            } catch(IOException e){
+
+            }
+
+            ArrayList<String> texts = new ArrayList<>();
+
+            DecimalFormat df = new DecimalFormat("#.###");
+            texts.add(tagged.getName());
+            texts.add("Mass: " + tagged.getMass() + " kg");
+            texts.add("Radius: " + tagged.getRadius()/1000 + " km");
+            texts.add("Axis: " + tagged.getAxis()/1000 + " km");
+            texts.add("Orbital velocity: " + df.format(tagged.getOrbitV()/1000) + " km/s");
+            texts.add("Period: " + df.format(tagged.getPeriod()) + " Earth years");
+
+            drawCenteredString(g, texts);
+        }
+    }
+
+    public void drawCenteredString(Graphics g, ArrayList<String> s){
+
+        Font f = new Font("Serif", Font.BOLD, 50);
+        FontMetrics metrics = g.getFontMetrics(f);
+
+        String text;
+        int x;
+        int y = 300;
+        for(int i = 0; i < s.size(); i++){
+            text = s.get(i);
+
+            // Determine the X coordinate for the text
+            x = (initWidth/2 - metrics.stringWidth(text)) / 2;
+
+
+            // Set the font
+            g.setFont(f);
+
+            g.setColor(Color.black);
+            // Draw the String
+            g.drawString(text, x, y);
+
+
+            y += metrics.getAscent() + 30;
+
+            //Change fonts for the non title text
+            f = new Font("Serif", Font.PLAIN, 25);
+            metrics = g.getFontMetrics(f);
+        }
+
+
+    }
+
+    public void paintSidebar(Graphics g, Body b){
+        super.paintComponent(g);
+        g.setColor(Color.DARK_GRAY);
+        //g.fillRect(initWidth/2 + initWidth, initHeight/2 + initHeight, initWidth /2, initHeight /2);
+        g.fillRect(750,0, 400, 800);
+    }
+
+    public void info(int x, int y){
+        for(int i = 0; i < images.size(); i++){
+            System.out.println("seen");
+            if(images.get(i).contains(x,y)) {
+                sideBar = true;
+                tagged = world.getBodies().get(i);
+                System.out.println("contained");
+            }
+        }
     }
 
     @Override

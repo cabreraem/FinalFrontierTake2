@@ -20,14 +20,32 @@ public class Body {
     private String label;
     private double accel;
     private String image;
+    private double orbitV;
+
+    private int scaledRadius;
+    private int scaledX;
+    private int scaledY;
 
     //Constructors
     public Body(String s, double m, double r, double a, double v, String i){
         mass = m;
         radius = r;
+
+        if(s.equals("Sun"))
+            scaledRadius = (int) Math.sqrt(r) /100;
+        else
+            scaledRadius = (int) Math.sqrt(r) / 300;
+
         axis = a;
+
         posX = a / Math.sqrt(2);
         posY = a / Math.sqrt(2);
+
+        setScaledX();
+        setScaledY();
+
+        orbitV = v;
+
         double vel = Math.sqrt(G*1.99e30/a);
         velocityX = vel / Math.sqrt(2);
         velocityY = - vel /Math.sqrt(2);
@@ -35,6 +53,9 @@ public class Body {
         accel = 0;
 
         image = i;
+
+        double AU = a /1.50E+11;
+        period = Math.sqrt(AU*AU*AU);
     }
 
     public Body(double m, double r, double x, double y, double vX, double vY, double p, double a) {
@@ -104,6 +125,20 @@ public class Body {
 
     public String getImage(){ return image;}
 
+    public int getScaledRadius(){return scaledRadius;}
+
+    public int getScaledX(){return scaledX;}
+
+    public int getScaledY(){return scaledY;}
+
+    public double getOrbitV() {
+        return orbitV;
+    }
+
+    public double getPeriod() {
+        return period;
+    }
+
     //Setters
     public void setPosX(double posX) {
         this.posX = posX;
@@ -113,38 +148,42 @@ public class Body {
         this.posY = posY;
     }
 
+    public void setScaledX(){this.scaledX = (int) Math.cbrt(posX) /45;}
+    public void setScaledY(){this.scaledY = (int) Math.cbrt(posY) /45;}
+
     public void updateAccelFrom(Body b){
         double dX = b.getPosX() - posX;
         double dY = b.getPosY() - posY;
         double dist = Math.sqrt(dX*dX + dY*dY);
-        //double dist = this.axis;
 
         accel = G * b.getMass() / Math.pow(dist, 2);
 
         this.accelX = (dX / dist) * accel;
         this.accelY = (dY / dist) * accel;
-        if(this.label.equals("Mercury")) {
+        /*if(this.label.equals("Mercury")) {
             System.out.println("xaccel: " + this.accelX);
             System.out.println("yaccel: " + this.accelY);
-        }
+        }*/
     }
 
-    public void move(int t){
+    public void move(int t, Body b){
         //permit arbitrarily large intervals
         int interval = Math.min(t, 100);
         for (int i = 0; i < t/interval; i++) {
-            moveHelper(interval);
+            moveHelper(interval, b);
         }
-        moveHelper(t%interval);
+        moveHelper(t%interval, b);
     }
 
-    void moveHelper(int t){
+    void moveHelper(int t, Body b){
+        updateAccelFrom(b);
         this.velocityX += this.accelX * t;
         this.velocityY += this.accelY * t;
 
         this.posX += this.velocityX * t;
         this.posY += this.velocityY * t;
 
-        //TODO: update acceleration values
+        setScaledX();
+        setScaledY();
     }
 }
